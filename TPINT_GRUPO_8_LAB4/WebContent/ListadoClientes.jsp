@@ -1,93 +1,77 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="dominio.Cliente" %>
-<%@ page import="java.util.List" %>
-
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="dominio.Cliente"%>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Listado de Clientes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" type="text/css" href="css/StyleSheet.css">
+   
+    <title>Administrador</title>
 </head>
 <body>
-
     <div class="encabezado">
-        <%@ include file="NavBarAdm.jsp" %>
+       <%@ include file="NavBarAdm.jsp" %>
     </div>
 
     <div class="Formulario">
         <form method="get" action="servletCliente">
             <h2>Listado de Clientes</h2>
             <input type="submit" name="btnListarClientes" value="Mostrar Clientes">
-            <br></br>
-        </form>
+            
+    		<hr>
+    		<br>
+            
+            <table border="1">
+                <tr>
+                    <th>DNI Cliente</th>
+                    <th>Usuario</th>
+                    <th>Contraseña</th>
+                </tr>
+                <% if (request.getAttribute("listaCliente") != null) {
+                    ArrayList<Cliente> listaCliente = (ArrayList<Cliente>) request.getAttribute("listaCliente");
+                    for (Cliente user : listaCliente) { %>
+                        <tr>
+                            <td><%=user.getDni()%></td>
+                            <td><%=user.getEmail()%></td>
+                            <td><%=user.getContrasenia()%></td>
+                        </tr>
+                    <% }
+                } %>
+            </table>
 
-        <table border="1">
-            <tr>
-                <th>DNI Cliente</th>
-                <th>Usuario</th>
-                <th>Contraseña</th>
-            </tr>
-
-            <% if (request.getAttribute("listaCliente") != null) {
-                List<Cliente> listaCliente = (List<Cliente>) request.getAttribute("listaCliente");
-
-                for (Cliente user : listaCliente) { %>
-                    <tr>
-                        <td><%=user.getDni()%></td>
-                        <td><%=user.getEmail()%></td>
-                        <td><%=user.getContrasenia()%></td>
-                    </tr>
-                <% }
-            } %>
-        </table>
-
-       
-        <div>
-           <% if (request.getAttribute("currentPage") != null && request.getAttribute("totalPages") != null) {
-        int currentPage = (int) request.getAttribute("currentPage");
-        int totalPages = (int) request.getAttribute("totalPages");
-
-        for (int i = 1; i <= totalPages; i++) { %>
-            <a href="servletCliente?page=<%= i %>"><%= i %></a>
-        <% }
-    } %>
-        </div>
-
-      
-        <form method="get" action="servletCliente">
+            <p>DNI Cliente <input type="number" name="dniClienteModificar"></input></p>
+            <p>Establezca su contraseña (6 caracteres):  <input type="password" name="ContraseniaNueva" maxlength="6"></input>
+            <input type="submit" name="btnModificarContrasenia" value="Aceptar">
+            
+            <%
            
-            <input type="hidden" name="page" value="<%= request.getAttribute("currentPage") %>">
+			        
             
-            
-        </form >
-		 <form method="post" action="servletCliente">
-        <p>DNI Cliente <input type="number" name="dniClienteModificar"></p>
-        <input type="submit" name="btnBuscarCliente" value="Buscar">
-        
-        <p>Establezca su contraseña (6 caracteres):  <input type="password" name="ContraseniaNueva" maxlength="6"></p>
-        <br></br>
-       
-        <br></br>
-        <input type="submit" name="btnModificarContrasenia" value="Aceptar">
+          if (request.getAttribute("modificoContrasenia") != null) {
+%>
+    <p>Se modifico la contraseña correctamente.</p>
 
-        <% if (request.getAttribute("modificoContrasenia") != null) { %>
-            <p>Se modificó la contraseña correctamente.</p>
-        <% } else if (request.getAttribute("noModifoContrasenia") != null) { %>
-            <p>No se pudo modificar la contraseña.</p>
-        <% } %>
+<%
+}
+          else if  (request.getAttribute("noModifoContrasenia") != null) {
+%>
+    <p>No se puedo modificar la contaseña.</p>
 
-        <% if (request.getAttribute("contraseniaVacia") != null) { %>
-            <div class="mensaje-error">La contraseña no puede estar vacía.</div>
-        <% } %>
-         </form>
-        <form method="get" action="servletReportes">
-        <br></br>
-        <input type="submit" name="btnListarExport" value="Reporte de clientes">
-    </form>
+<%
+}
+%>
+   
+<% if (request.getAttribute("contraseniaVacia") != null) { %>
+    <div class="mensaje-error">La contraseña no puede estar vacía.</div>
+<% } %>
+   
+<br>    	
+</form>
+<form method="get" action="servletReportes">
+<input type="submit" name="btnListarExport" value="Reporte de clientes">
+</form>
         
-    </div>
+</div>
 </body>
 </html>
-
 

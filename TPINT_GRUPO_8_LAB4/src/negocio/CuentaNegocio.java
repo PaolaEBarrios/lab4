@@ -18,6 +18,13 @@ public class CuentaNegocio {
 	}
 	
 	
+	public boolean darBajaCuenta(String cbu)
+	{
+		CuentaDaoImpl cuentaDaoImpl= new CuentaDaoImpl();
+		
+		return cuentaDaoImpl.deleteLogico(cbu);
+	}
+	
 	public List<Cuenta> listaCuentaXdni(String dni) 
 	{
 		CuentaDaoImpl cuentasDaoImpl= new CuentaDaoImpl();
@@ -28,7 +35,23 @@ public class CuentaNegocio {
 		return cuentas;
 	}
 	
+	public boolean crearCuenta(Cuenta cuenta)
+	{
+		CuentaDaoImpl cuentaDaoImpl= new CuentaDaoImpl();
 		
+		return cuentaDaoImpl.insert(cuenta);
+	}
+		
+	
+	public Cuenta obtenerCuentaXNroCbu(String cbu)
+	{
+		CuentaDaoImpl cuentaDaoImpl= new CuentaDaoImpl();
+		Cuenta cuenta=  cuentaDaoImpl.obtenerCuentaXCbu(cbu);
+
+	
+		return cuenta;
+	}
+	
 	
 	
 	

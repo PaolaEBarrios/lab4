@@ -11,6 +11,7 @@ import dao.ClienteDaoImpl;
 import dao.CuentaDaoImpl;
 import dominio.Cliente;
 import dominio.Cuenta;
+import negocio.CuentaNegocio;
 
 /**
  * Servlet implementation class servletBajaCuentas
@@ -40,35 +41,52 @@ public class servletBajaCuentas extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
 		if (request.getParameter("btnBuscarCBU") != null) {
 			String CBU = request.getParameter("CBUCuenta");
+			
+			
 			if (CBU != null) {
-				CuentaDaoImpl cuentaDaoImpl = new CuentaDaoImpl();
-				Cuenta cuenta = cuentaDaoImpl.obtenerCuentaXCbu(CBU);
+			
+				
+				//CuentaDaoImpl cuentaDaoImpl = new CuentaDaoImpl();
+				//
 
+				CuentaNegocio cuentaNegocio = new CuentaNegocio();
+				Cuenta cuenta = cuentaNegocio.obtenerCuentaXNroCbu(CBU);
+				
+				
+				System.out.println("cuenta: "+ cuenta);
 				if (cuenta != null) {
 					if (cuenta.getActiva()==true)
 					{
-					request.setAttribute("cuenta", cuenta);
-					request.getRequestDispatcher("BajaCuenta.jsp").forward(request, response);
-	}
+						request.setAttribute("cuenta", cuenta);
+						request.getRequestDispatcher("BajaCuenta.jsp").forward(request, response);
+					}
 					else {
 						request.setAttribute("noactivo", true);
 						request.getRequestDispatcher("BajaCuenta.jsp").forward(request, response);
 						
 					}
-					}
+				}
 				else {
 					request.setAttribute("noexiste", true);
 					request.getRequestDispatcher("BajaCuenta.jsp").forward(request, response);
 				}
 
+				}
 }
-			}
 		if (request.getParameter("btnDarBajaCuenta") != null) {
-			CuentaDaoImpl daoCuenta = new CuentaDaoImpl();
+			
+			CuentaNegocio cuentaNegocio = new CuentaNegocio();
+			
 			String cbuCuenta = request.getParameter("CBUSeleccionado");
-			boolean resultado = daoCuenta.deleteLogico(cbuCuenta);
+			
+
+			
+			boolean resultado = cuentaNegocio.darBajaCuenta(cbuCuenta);
+			//boolean resultado = daoCuenta.deleteLogico(cbuCuenta);
 
 			
 			System.out.println("RESULTADO: " + resultado);

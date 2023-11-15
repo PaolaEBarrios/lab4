@@ -10,6 +10,11 @@ public class Cuenta {
 	double Saldo;
 	boolean Activa;
 	
+	public Cuenta()
+	{
+		
+	}
+	
 	public boolean getActiva() {
 		return Activa;
 	}
@@ -32,7 +37,7 @@ public class Cuenta {
 	    }
 
 	 private String generarNroCuenta() {
-	        int longitudCBU = 22; 
+	        int longitudCBU = 20; 
 	        StringBuilder cbuBuilder = new StringBuilder();
 	        Random random = new Random();
 
@@ -53,6 +58,28 @@ public class Cuenta {
 		this.FechaCreacion = FechaCreacion;
 		this.Saldo = 10000.00;
 		this.Activa = Activa;
+	}
+	
+	
+
+	public String getTipoCuenta() {
+		return TipoCuenta;
+	}
+
+	public void setTipoCuenta(String tipoCuenta) {
+		TipoCuenta = tipoCuenta;
+	}
+
+	public Cuenta(String nroCuenta, String dniCliente, String cBU, String tipoCuenta, String fechaCreacion,
+			double saldo, boolean activa) {
+		super();
+		NroCuenta = nroCuenta;
+		DniCliente = dniCliente;
+		CBU = cBU;
+		TipoCuenta = tipoCuenta;
+		FechaCreacion = fechaCreacion;
+		Saldo = saldo;
+		Activa = activa;
 	}
 
 	public String getNroCuenta() {

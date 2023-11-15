@@ -34,6 +34,7 @@
 	Cuenta cuenta = (Cuenta) request.getAttribute("cuenta");
 if (cuenta != null) {
 %>
+<p><strong>DNI cliente: </strong><%=cuenta.getDniCliente() %></p>
 <p><strong>Numero de cuenta:</strong> <%=cuenta.getNroCuenta() %></p>
 <p><strong>CBU:</strong> <%=cuenta.getCBU() %></p>
 <p><strong>Tipo de cuenta:</strong> <%=cuenta.getTipo() %></p>

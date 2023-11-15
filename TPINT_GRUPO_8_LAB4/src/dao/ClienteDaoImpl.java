@@ -82,7 +82,12 @@ public class ClienteDaoImpl implements ClienteDao {
 			statement = conexion.getSQLConexion().prepareStatement(readall);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				clientes.add(getCliente(resultSet));
+				 boolean activo = resultSet.getBoolean("Activo");
+		            
+		            if (activo) {
+		                clientes.add(getCliente(resultSet));
+		            }
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

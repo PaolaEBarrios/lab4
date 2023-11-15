@@ -50,10 +50,15 @@ public class CuentaDaoImpl implements CuentaDao {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isDeleteExitoso = false;
+		
+		System.out.println("cbu: "+CBU);
+		
 		try {
 			statement = conexion.prepareStatement(delete);
 			statement.setBoolean(1, false);
 			statement.setString(2, CBU);
+			
+			
 			if (statement.executeUpdate() > 0) {
 				conexion.commit();
 				isDeleteExitoso = true;
@@ -66,6 +71,8 @@ public class CuentaDaoImpl implements CuentaDao {
 				e1.printStackTrace();
 			}
 		}
+		
+		System.out.println("ES DELETE : EXITO O FALSE: "+isDeleteExitoso);
 		return isDeleteExitoso;
 	}
 
@@ -107,44 +114,47 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	@Override
 	public Cuenta obtenerCuentaXCbu(String Cbu) {
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		Connection conexion = Conexion.getConexion().getSQLConexion();
+	    PreparedStatement statement = null;
+	    ResultSet resultSet = null;
+	    Connection conexion = Conexion.getConexion().getSQLConexion();
 
-		try {
-			String consulta = "SELECT * FROM cuentas WHERE CBU = ?";
-			statement = conexion.prepareStatement(consulta);
-			statement.setString(1, Cbu);
+	    try {
+	        String consulta = "SELECT * FROM cuentas WHERE CBU = ?";
+	        statement = conexion.prepareStatement(consulta);
+	        statement.setString(1, Cbu);
 
-			resultSet = statement.executeQuery();
+	        resultSet = statement.executeQuery();
 
-			if (resultSet.next()) {
-				String DniCliente = resultSet.getString("DniCliente");
-				String CBU = resultSet.getString("CBU");
-				String IdTipo = resultSet.getString("IdTipo");
-				String FechaCreacion = resultSet.getString("FechaCreacion");
-				String Saldo = resultSet.getString("Saldo");
-				Boolean activa = resultSet.getBoolean("activa");
-				Cuenta cuenta = new Cuenta(DniCliente,IdTipo, FechaCreacion, activa);
-				return cuenta;
-			
-					
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (resultSet != null)
-					resultSet.close();
-				if (statement != null)
-					statement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+	        if (resultSet.next()) {
+	            System.out.println("Entró: ");
+	            String DniCliente = resultSet.getString("DniCliente");
+	            String CBU = resultSet.getString("CBU"); 
+	            String IdTipo = resultSet.getString("Tipo");
+	            String NroCuenta = resultSet.getString("NroCuenta");
+	            String FechaCreacion = resultSet.getString("FechaCreacion");
+	            double Saldo = resultSet.getDouble("Saldo"); 
+	            boolean activa = resultSet.getBoolean("Activa"); 
+	            Cuenta cuenta = new Cuenta(NroCuenta, DniCliente, CBU, IdTipo, FechaCreacion, Saldo, activa);
 
-		return null;
+	            return cuenta;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (resultSet != null)
+	                resultSet.close();
+	            if (statement != null)
+	                statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return null;
 	}
+
+
 
 	public int cantidadCuentasXdni(String dni) {
 		int cant = 0;

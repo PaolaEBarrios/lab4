@@ -2,6 +2,9 @@ package negocio;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import dao.ClienteDao;
 import dao.ClienteDaoImpl;
 import dominio.Cliente;
@@ -14,6 +17,16 @@ public class ClienteNegocio {
         this.clienteDao = new ClienteDaoImpl();
     }
 
+	
+	public boolean darBajaCliente(String dni)
+	{
+		
+		ClienteDaoImpl clienteDaoImpl= new ClienteDaoImpl();
+		
+		boolean resultado= clienteDaoImpl.deleteLogico(dni);
+		return resultado;
+	}
+	
 	public List<String> obtenerProvincias(){
 		 
 		 List<String> provincias = clienteDao.obtenerProvincias();
@@ -55,6 +68,12 @@ public class ClienteNegocio {
 		cliente=clienteDaoImpl.obtenerClienteXdni(dni);
 		
 		return cliente;
+	}
+	
+	public void actualizar(Cliente cliente, String dniCuenta)
+	{
+		ClienteDaoImpl clienteDaoImpl = new ClienteDaoImpl();
+		clienteDaoImpl.update(cliente, dniCuenta);
 	}
 	
 }

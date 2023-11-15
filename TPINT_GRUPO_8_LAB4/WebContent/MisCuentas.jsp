@@ -58,6 +58,6 @@
 	<input type="submit" value="Aceptar" name="btnAceptarMisCuentas">
 
 	<br></br>
-	
+	<a href="Inicio.jsp" class="boton-volver">Volver a Inicio</a>
 </body>
 </html>

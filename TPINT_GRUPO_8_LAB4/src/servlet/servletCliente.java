@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -43,46 +42,53 @@ public class servletCliente extends HttpServlet {
 
 		
 		
-		ClienteNegocio clienteNegocio = new ClienteNegocio();
+		if (request.getParameter("btnListarClientes") != null) {
+			ClienteNegocio clienteNegocio = new ClienteNegocio();
+			
+			ArrayList<Cliente> listaCliente = (ArrayList<Cliente>) clienteNegocio.obtenerClientes();
+			
+			request.setAttribute("listaCliente", listaCliente);
+			request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
+		}
+		
+		
+		
+			if (request.getParameter("btnModificarContrasenia") != null) {
+				ClienteNegocio clienteNegocio = new ClienteNegocio();
+						
+						
+				String Dni = request.getParameter("dniClienteModificar");
+				// Cliente clienteModificar = daoCliente.obtenerClienteXdni(Dni);
+				String NuevaContrasenia = request.getParameter("ContraseniaNueva");
 
-	    
-	    ArrayList<Cliente> listaCompleta = (ArrayList<Cliente>) clienteNegocio.obtenerClientes();
-	    System.out.println(listaCompleta.toString());
-	  
-	    int pageSize = 10; 
-	    int currentPage = 1; 
+				
+				
+				if(!NuevaContrasenia.isEmpty())
+				{
+					
+					
+					boolean clienteModificado = clienteNegocio.modificarPass(Dni,NuevaContrasenia);
+					
+					System.out.println("RESULT BOOL " +clienteModificado);
+					if (clienteModificado) {
+						request.setAttribute("modificoContrasenia", true);
+						request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
 
-	    if (request.getParameter("page") != null) {
-	        currentPage = Integer.parseInt(request.getParameter("page"));
-	    }
+					} else {
+						request.setAttribute("noModifoContrasenia", true);
+	
 
-	   
-	    int totalPages = (int) Math.ceil((double) listaCompleta.size() / pageSize);
+					}
+				}
+				else
+				{
+					System.out.println("Esta vacia");
+					request.setAttribute("contraseniaVacia", true);
+					request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
+				}
+				
+			}
 
-	    
-	    if (currentPage < 1) {
-	        currentPage = 1;
-	    } else if (currentPage > totalPages) {
-	        currentPage = totalPages;
-	    }
-
-	    // sublista para la página actual
-	    List<Cliente> listaPaginada = new ArrayList<>();
-	    int start = (currentPage - 1) * pageSize;
-	    int end = Math.min(start + pageSize, listaCompleta.size());
-	    if (start < end) {
-	        listaPaginada = listaCompleta.subList(start, end);
-	    }
-
-	    
-	    request.setAttribute("listaCliente", listaPaginada);
-	    request.setAttribute("currentPage", currentPage);
-	    request.setAttribute("totalPages", totalPages);
-
-	  
-	    request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
-	    
-	   
 
 		
 		
@@ -96,82 +102,7 @@ public class servletCliente extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		if (request.getParameter("btnBuscarCliente")!=null) {
-	    	ClienteNegocio clienteNegocio2 = new ClienteNegocio();
-	    	String dni = request.getParameter("dniClienteModificar");
-	    	 Cliente clienteEncontrado = clienteNegocio2.obtenerCliente(dni);
-	    	 if (clienteEncontrado != null) {
-	    		 System.out.println("Cliente encontrado: " + clienteEncontrado.toString());
-	    	        List<Cliente> listaPaginada1 = new ArrayList<>();
-	    	        listaPaginada1.add(clienteEncontrado);
 
-	    	        
-	    	        request.setAttribute("listaCliente", Arrays.asList(clienteEncontrado));
-	    	        request.setAttribute("currentPage", 1);
-	    	        request.setAttribute("totalPages", 1);
-	    	        request.getRequestDispatcher("ListadoClientes.jsp").forward(request,response);
-	    	        return;
-	    	    } else {
-	    	        
-	    	        request.setAttribute("mensajeError", "No se encontró un cliente con el DNI ingresado.");
-	    	    }
-
-	    	    
-	    	    //request.getRequestDispatcher("ListadoClientes.jsp").forward(request,response);
-	    	 
-	    	 return;
-	    }
-		
-			if (request.getParameter("btnModificarContrasenia") != null) {
-				ClienteNegocio clienteNegocio1 = new ClienteNegocio();
-						
-						
-				String Dni = request.getParameter("dniClienteModificar");
-				
-				String NuevaContrasenia = request.getParameter("ContraseniaNueva");
-
-				System.out.println("boton modificar contrasenia");
-				
-				if(!NuevaContrasenia.isEmpty())
-				{
-					
-					
-					boolean clienteModificado = clienteNegocio1.modificarPass(Dni,NuevaContrasenia);
-					Cliente cliente = clienteNegocio1.obtenerCliente(Dni);
-					System.out.println("RESULT BOOL " +clienteModificado);
-					if (clienteModificado) {
-						List<Cliente> listaPaginada2 = new ArrayList<>();
-		    	        listaPaginada2.add(cliente);
-
-		    	        
-		    	        request.setAttribute("listaCliente", Arrays.asList(cliente));
-		    	        request.setAttribute("currentPage", 1);
-		    	        request.setAttribute("totalPages", 1);
-		    	        
-						request.setAttribute("modificoContrasenia", true);
-					    request.setAttribute("nuevaContrasenia", NuevaContrasenia);
-						request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
-						return;
-						
-					} else {
-						request.setAttribute("noModifoContrasenia", true);
-						return;
-
-					}
-				}
-				else
-				{
-					System.out.println("Esta vacia");
-					request.setAttribute("contraseniaVacia", true);
-					request.getRequestDispatcher("ListadoClientes.jsp").forward(request, response);
-					return;
-				}
-				
-			}
-
-
-		
 		
 		  ClienteNegocio clienteNegocio = new ClienteNegocio();
 

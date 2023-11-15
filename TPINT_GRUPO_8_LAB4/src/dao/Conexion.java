@@ -14,7 +14,7 @@ import java.sql.SQLException;
 			try
 			{
 				Class.forName("com.mysql.cj.jdbc.Driver");
-				this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_banco","root","root");
+				this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_banco","root","secret");
 				
 				this.connection.setAutoCommit(false);
 			}

@@ -76,9 +76,13 @@ public class servletBaja extends HttpServlet {
 		}
 		//////si confirma que desea dar de baja el cliente
 		if (request.getParameter("btnDarBajaCliente") != null) {
-			ClienteDaoImpl daoCliente = new ClienteDaoImpl();
+			
+			ClienteNegocio clienteNegocio = new ClienteNegocio();
+			//ClienteDaoImpl daoCliente = new ClienteDaoImpl();
 			String dniCliente = request.getParameter("dniClienteSeleccionado");
-			boolean resultado = daoCliente.deleteLogico(dniCliente); // Usa el DNI del cliente
+			
+			boolean resultado = clienteNegocio.darBajaCliente(dniCliente);
+			//boolean resultado = daoCliente.deleteLogico(dniCliente); // Usa el DNI del cliente
 
 			
 			System.out.println("RESULTADO: " + resultado);

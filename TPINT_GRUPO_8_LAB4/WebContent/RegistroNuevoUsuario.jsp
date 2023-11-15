@@ -28,9 +28,11 @@
 </head>
 <body>
 
-<div class="encabezado">
 
-</div>
+    <div class="encabezado">
+       <%@ include file="NavBarAdm.jsp" %>
+    </div>
+
 
 <div class="Formulario" >
 
